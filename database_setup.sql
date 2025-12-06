@@ -22,3 +22,15 @@ CREATE TABLE IF NOT EXISTS auctions (
     status ENUM('Active', 'Closed', 'Paid') DEFAULT 'Active',
     FOREIGN KEY (producer_id) REFERENCES users(id)
 );
+
+-- جدول المنتجات الجديد
+CREATE TABLE IF NOT EXISTS listings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL, -- السعر المباشر
+    listing_type ENUM('Direct', 'Auction') DEFAULT 'Direct', -- نوع البيع
+    producer_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (producer_id) REFERENCES users(id)
+);
