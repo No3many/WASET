@@ -1,26 +1,23 @@
-from flask import Flask
+from flask import Flask, render_template, session
 from core.db_singleton import DatabaseConnection
-from controllers.auth_controller import auth_bp  # استدعاء الكنترولر
+from repositories.repository_factory import RepositoryFactory
+from controllers.auth_controller import auth_bp
+from controllers.listing_controller import listing_bp
+from controllers.user_controller import user_bp
 
 app = Flask(__name__)
+app.secret_key = 'waset_secret_key_123'
 
-# تسجيل ملفات التحكم (عشان الروابط تشتغل)
 app.register_blueprint(auth_bp)
+app.register_blueprint(listing_bp)
+app.register_blueprint(user_bp)
 
 @app.route("/")
 def home():
-    return """
-    <div style="text-align: center; padding-top: 50px;">
-        <h1 style="color: green;">WASET Backend is Online! 🚀</h1>
-        <p>Database Connection: <strong style="color: blue;">Active</strong></p>
-        <hr>
-        <p>Use Postman or Browser to test routes.</p>
-    </div>
-    """
+    listing_repo = RepositoryFactory.get_repository("listing")
+    listings = listing_repo.get_all_listings()
+    return render_template('index.html', listings=listings)
 
 if __name__ == "__main__":
-    # تشغيل الاتصال بالداتا بيز مرة واحدة عند البداية
-    print("🔄 Initializing Database Connection...")
     db = DatabaseConnection()
-    
     app.run(debug=True)
