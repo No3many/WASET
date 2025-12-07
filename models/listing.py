@@ -1,5 +1,5 @@
 class Listing:
-    def _init_(self, id, title, description, price, listing_type, producer_id, image_url=None, created_at=None, producer_name=None):
+    def __init__(self, id, title, description, price, listing_type, producer_id, image_url=None, created_at=None, producer_name=None):
         self.id = id
         self.title = title
         self.description = description
