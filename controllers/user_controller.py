@@ -5,14 +5,17 @@ user_bp = Blueprint('user', __name__, url_prefix='/user')
 
 @user_bp.route('/profile')
 def profile():
+    # 1. لو مفيش يوزر في الجلسة، حوله للوجين
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
 
     user_repo = RepositoryFactory.get_repository("user")
     user = user_repo.get_by_id(session['user_id'])
 
+    # 2. (التصحيح هنا) لو اليوزر اتمسح من الداتا بيز، نعمل خروج فوراً
     if user is None:
         session.clear()
+        flash("Session expired. Please login again.", "warning")
         return redirect(url_for('auth.login'))
 
     return render_template('profile.html', user=user)
@@ -25,6 +28,7 @@ def edit_profile():
     user_repo = RepositoryFactory.get_repository("user")
     user = user_repo.get_by_id(session['user_id'])
     
+    # حماية برضه هنا
     if user is None:
         session.clear()
         return redirect(url_for('auth.login'))

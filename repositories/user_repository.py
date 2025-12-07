@@ -32,6 +32,7 @@ class UserRepository:
         cursor.execute(query, (email,))
         row = cursor.fetchone()
         cursor.close()
+        
         if row:
             return User(row['id'], row['username'], row['email'], row['password_hash'], row['role'], row['phone'], row['address'], row['shipping_company'], row['industry_type'], row['rating'], row['profile_image'])
         return None
@@ -42,6 +43,7 @@ class UserRepository:
         cursor.execute(query, (user_id,))
         row = cursor.fetchone()
         cursor.close()
+        
         if row:
             return User(row['id'], row['username'], row['email'], row['password_hash'], row['role'], row['phone'], row['address'], row['shipping_company'], row['industry_type'], row['rating'], row['profile_image'])
         return None
