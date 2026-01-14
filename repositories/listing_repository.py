@@ -4,16 +4,38 @@ from models.listing import Listing
 class ListingRepository:
     def __init__(self):
         self.connection = DatabaseConnection().get_connection()
-
-    def add_listing(self, title, description, price, listing_type, image_url, producer_id):
+    def add_listing(
+        self,
+        title,
+        description,
+        price,
+        listing_type,
+        image_url,
+        producer_id,
+        auction_end=None
+    ):
         cursor = self.connection.cursor()
         query = """
-            INSERT INTO listings (title, description, price, listing_type, image_url, producer_id)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO listings
+            (title, description, price, listing_type, image_url, producer_id, auction_end)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (title, description, price, listing_type, image_url, producer_id))
+        cursor.execute(
+            query,
+            (
+                title,
+                description,
+                price,
+                listing_type,
+                image_url,
+                producer_id,
+                auction_end
+            )
+        )
+    
         self.connection.commit()
         cursor.close()
+
 
     def get_all_listings(self):
         cursor = self.connection.cursor(dictionary=True)
